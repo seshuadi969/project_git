@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "html-site"
+        CONTAINER_NAME = "html_container"
+        HTML_DIR = "2132_clean_work"
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                echo "📥 Cloning Git repository..."
+                // Jenkins will clone it automatically
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                dir("${HTML_DIR}") {
+                    echo "🛠️ Building Docker image..."
+                    writeFile file: 'Dockerfile', text: '''
+FROM nginx:alpine
+COPY . /usr/share/nginx/html
+                    '''
+                    sh 'docker build -t $IMAGE_NAME .'
+                }
+            }
+        }
+
+        stage('Deploy Container') {
+            steps {
+                echo "🚀 Deploying Docker container..."
+                sh '''
+                    docker stop $CONTAINER_NAME || true
+                    docker rm $CONTAINER_NAME || true
+                    docker run -d -p 8080:80 --name $CONTAINER_NAME $IMAGE_NAME
+                '''
+            }
+        }
+
+        stage('Success Message') {
+            steps {
+                echo "✅ Site deployed! Visit: http://<your-ec2-ip>:8080"
+            }
+        }
+    }
+}
+
