@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/YOUR_USERNAME/YOUR_REPO.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    writeFile file: 'Dockerfile', text: '''
+FROM nginx:alpine
+COPY . /usr/share/nginx/html
+                    '''
+                    sh 'docker build -t html-site .'
+                }
+            }
+        }
+
+        stage('Deploy Container') {
+            steps {
+                script {
+                    sh '''
+                        docker rm -f html_container || true
+                        docker run -d -p 8081:80 --name html_container html-site
+                    '''
+                }
+            }
+        }
+    }
+}
+
