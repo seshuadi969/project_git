@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone from Git') {
             steps {
-                git branch: 'main', url: 'https://github.com/YOUR_USERNAME/YOUR_REPO.git'
+                git branch: 'main', url: 'https://github.com/seshuadi969/project_git.git'
             }
         }
 
