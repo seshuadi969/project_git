@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building the application...'
+                // Simulate a build process
+                sh 'mkdir -p build && echo "Build complete!" > build/status.txt'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                // Simulate testing
+                sh 'echo "Tests passed!"'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+                // Simulate deployment
+                sh 'echo "Application deployed!"'
+            }
+        }
+    }
+}
