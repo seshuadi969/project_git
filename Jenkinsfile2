@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Pull code from your repo
+                git 'https://github.com/seshuadi969/project_git.git'
+            }
+        }
+
+        stage('Run Python Script') {
+            steps {
+                sh 'python3 app.py'
+            }
+        }
+    }
+}
+
